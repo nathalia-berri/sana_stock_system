@@ -2,7 +2,10 @@
 
 Sistema web completo para gestão de almoxarifado com controle de estoque, rastreabilidade de movimentações e relatórios gerenciais.
 
-O projeto SANA Stock System surge da necessidade de modernizar o controle de materiais em almoxarifados. Processos manuais em papel são suscetíveis a erros de contagem, perdas não identificadas e falta de rastreabilidade sobre quem retirou cada item. A simples digitalização (planilhas Excel) não resolve problemas como estoque desatualizado em tempo real, validação de saídas por funcionário ou alertas automáticos de estoque mínimo.
+O projeto SANA Stock System surge da necessidade de modernizar o controle de materiais em almoxarifados. 
+Processos manuais em papel são suscetíveis a erros de contagem, perdas não identificadas e falta de rastreabilidade sobre quem retirou cada item. 
+A simples digitalização (planilhas Excel) não resolve problemas como estoque desatualizado em tempo real, validação de saídas por funcionário ou alertas automáticos de estoque mínimo.
+
 O sistema proposto é uma solução completa para gestão de estoque de materiais, voltada para organizações que precisam controlar entradas, saídas, responsáveis e níveis de estoque com precisão e segurança. Ele foi planejado para tornar o processo mais rápido, confiável e totalmente auditável.
 
 ---
