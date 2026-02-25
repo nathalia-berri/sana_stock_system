@@ -13,30 +13,49 @@ O sistema proposto é uma solução completa para gestão de estoque de materiai
 # Domínio do Problema
 
 **SANA Stock System** resolve os problemas clássicos dos almoxarifados manuais:
+
 ❌ Estoque desatualizado entre planilhas e realidade física
+
 ❌ Sem rastreabilidade: "Quem retirou este material?"
+
 ❌ Perdas não identificadas sem responsável vinculado
+
 ❌ Alertas tardios de reposição (ruptura de estoque)
 
 ---
 
 ## Requisitos Funcionais (RF)
+
 RF01 - CRUD completo de Materiais (código único, categoria, estoque atual/mínimo)
+
 RF02 - CRUD de Categorias para organização
+
 RF03 - CRUD de Funcionários (nome, matrícula, área)
+
 RF04 - Autenticação JWT com 3 perfis: Admin, Almoxarife, Colaborador
+
 RF05 - Registro de ENTRADAS com atualização automática de estoque
+
 RF06 - Registro de SAÍDAS validadas (saldo suficiente + funcionário responsável)
+
 RF07 - Histórico completo de movimentações (quem, quando, o quê)
+
 RF08 - Dashboard com alertas de estoque mínimo
+
 RF09 - Relatório semanal (entradas/saídas, top funcionários, áreas consumidoras)
 
 ## Requisitos Não Funcionais (RNF)
+
 RNF01 - API REST com autenticação JWT
+
 RNF02 - Transações ACID para integridade de estoque
+
 RNF03 - Senhas criptografadas (bcrypt)
+
 RNF04 - Performance < 500ms para movimentações
+
 RNF05 - Interface responsiva desktop/mobile
+
 RNF06 - Logs de auditoria completos
 
 ---
@@ -62,44 +81,58 @@ RNF06 - Logs de auditoria completos
 ## Sprint 1: Setup + Autenticação (Semana 1)
 
 **👩‍💻 Nathalia:**
+
 - [ ] Configurar repo GitHub + .gitignore + estrutura pastas
+      
 - [ ] Backend FastAPI: main.py + login/register endpoints + JWT middleware
+      
 - [ ] Frontend React: Vite setup + tela login + Axios para API
 
 **👨‍💻 Anselmo:**
+
 - [ ] SQLite config + SQLAlchemy model User
+      
 - [ ] Tabela users + testes básicos autenticação
+      
 - [ ] CORS no FastAPI + primeiro deploy Railway/Vercel
 
 ## Sprint 2: Core Estoque (Semana 2)
 
 **👩‍💻 Nathalia:**
+
 - [ ] Backend: SQLAlchemy models (categorias + materiais) + CRUD endpoints FastAPI
+      
 - [ ] Frontend React: Listagem materiais + formulário CRUD
 
 **👨‍💻 Anselmo:**
 - [ ] Backend: Model funcionarios + CRUD simples
+      
 - [ ] Frontend: Dashboard React com cards (totais, alertas estoque mínimo)
 
 ## Sprint 3: Movimentações (Semana 3)
 
 **👩‍💻 Nathalia:**
 - [ ] Backend: Model movimentacoes + endpoint ENTRADA (validação + update estoque)
+      
 - [ ] Frontend: Tela listagem movimentações + filtros (data, tipo)
 
 **👨‍💻 Anselmo:**
 - [ ] Backend: Endpoint SAÍDA (validação saldo + funcionário obrigatório + transação)
+      
 - [ ] Frontend: Formulários entrada/saída React
 
 ## Sprint 4: Relatórios + Deploy (Semana 4)
 
 **👩‍💻 Nathalia:**
 - [ ] Backend: Endpoint relatório semanal (agregações SQLAlchemy)
+      
 - [ ] Frontend: Tela relatórios + tabela/export CSV
 
 **👨‍💻 Anselmo:**
 - [ ] Frontend: Responsividade mobile + charts simples (opcional Chart.js)
+      
 - [ ] Deploy final: Railway (backend+SQLite) + Vercel (React)
+      
 - [ ] Testes manuais + vídeo demo + documentação Swagger
 
 ---
@@ -110,18 +143,29 @@ Arquitetura Monolítica + MVC
 ## Componentes da Arquitetura
 
 **Frontend (React SPA)**:
+
 - Interface única (Single Page Application)
+  
 - Requisições via Axios para API backend
+  
 - Estados gerenciados por React Hooks (useState, useEffect)
+  
 - Responsivo mobile/desktop
 
 **Backend (FastAPI Python)**:
+
 - API REST com endpoints documentados automaticamente (/docs)
+  
 - Middleware JWT para autenticação em todas rotas protegidas
+  
 - SQLAlchemy para comunicação segura com SQLite
+  
 - Validações Pydantic automáticas
 
 **Banco de Dados (SQLite)**:
+
 - Arquivo único `sana.db` (local ou deploy)
+  
 - 5 tabelas principais: users, categorias, materiais, funcionarios, movimentacoes
+  
 - Transações ACID garantem integridade de estoque
