@@ -32,17 +32,15 @@ RF02 - CRUD de Categorias para organização
 
 RF03 - CRUD de Funcionários (nome, matrícula, área)
 
-RF04 - Autenticação JWT com 3 perfis: Admin, Almoxarife, Colaborador
+RF04 - Registro de ENTRADAS com atualização automática de estoque
 
-RF05 - Registro de ENTRADAS com atualização automática de estoque
+RF05 - Registro de SAÍDAS validadas (saldo suficiente + funcionário responsável)
 
-RF06 - Registro de SAÍDAS validadas (saldo suficiente + funcionário responsável)
+RF06 - Histórico completo de movimentações (quem, quando, o quê)
 
-RF07 - Histórico completo de movimentações (quem, quando, o quê)
+RF07 - Dashboard com alertas de estoque mínimo
 
-RF08 - Dashboard com alertas de estoque mínimo
-
-RF09 - Relatório semanal (entradas/saídas, top funcionários, áreas consumidoras)
+RF08 - Relatório semanal (entradas/saídas, top funcionários, áreas consumidoras)
 
 ## Requisitos Não Funcionais (RNF)
 
