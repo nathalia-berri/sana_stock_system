@@ -1,0 +1,13 @@
+@startuml C4_Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title C4 - Nível 1 - Contexto | Sana Stock System
+
+Person(Funcionario, "Funcionário", "Retira materiais do estoque e consulta movimentações")
+Person(Admin, "Administrador / Almoxarife", "Gerencia materiais, estoque, relatórios e auditoria")
+
+System(SanaSystem, "Sana Stock System", "Sistema web para controle de estoque, rastreamento de movimentações e relatórios gerenciais")
+
+Rel(Funcionario, SanaSystem, "Registra retirada de materiais", "React Web App")
+Rel(Admin, SanaSystem, "Gerencia estoque e relatórios", "React Web App")
+@enduml
