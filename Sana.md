@@ -1,17 +1,28 @@
-```mermaid
-flowchart LR
+```plantuml
+@startuml C4_Component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-Funcionario[Funcionário]
-Almoxarife[Almoxarife]
-Admin[Administrador]
 
-Sistema[SANA Stock System]
+title C4 - Nível 3 - Componentes | API FastAPI
 
-Funcionario -->|Consulta materiais| Sistema
-Almoxarife -->|Registra entradas e saídas| Sistema
-Admin -->|Gerencia usuários| Sistema
+Container_Boundary(APIBoundary, "API Application - FastAPI") {
+    Component(Controllers, "Controllers / Routes", "FastAPI", "Endpoints REST responsáveis pelas requisições HTTP")
+    Component(Services, "Services", "Python", "Implementa regras de negócio e validações")
+    Component(Repositories, "Repositories", "SQLAlchemy", "Camada de acesso ao banco de dados")
+    Component(Models, "Models", "SQLAlchemy ORM", "Entidades do sistema e mapeamento relacional")
+    Component(Schemas, "Schemas", "Pydantic", "Validação e serialização dos dados (DTOs)")
+}
 
-```
+ContainerDb(DB, "Database", "MariaDB", "Persistência das informações")
+
+Rel(Controllers, Services, "Encaminha requisições")
+Rel(Services, Repositories, "Chama operações de dados")
+Rel(Repositories, DB, "Executa SQL / Triggers", "SQL")
+Rel(Controllers, Schemas, "Valida entrada/saída")
+Rel(Repositories, Models, "Mapeia resultados")
+
+@enduml
+    ```
 
 
 ```mermaid
