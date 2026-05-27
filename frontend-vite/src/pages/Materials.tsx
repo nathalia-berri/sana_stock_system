@@ -160,32 +160,36 @@ export function Materials() {
           </button>
         </div>
 
-        <div className="rounded-2xl bg-red-500 p-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/80" />
-              <input
-                placeholder="Buscar por código ou nome..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full h-11 rounded-xl border border-white/70 bg-transparent pl-11 pr-4 text-white placeholder:text-white/80 outline-none"
-              />
-            </div>
+      <div className="rounded-2xl bg-white p-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="relative">
+            {/* Ícone de busca em cinza, igual ao Movements */}
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
 
-            <select
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="h-11 rounded-xl border border-white/70 bg-transparent px-4 text-white outline-none"
-            >
-              <option value="all" className="text-black">Todas as categorias</option>
-              {categories.map((category) => (
-                <option key={category} value={category} className="text-black">
-                  {category}
-                </option>
-              ))}
-            </select>
+            {/* Input branco com borda cinza clara */}
+            <input
+              placeholder="Buscar por código ou nome..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full h-11 rounded-xl border border-gray-300 bg-white pl-11 pr-4 text-gray-700 placeholder:text-gray-400 outline-none"
+            />
           </div>
+
+          {/* Filtro de categorias também padronizado em branco */}
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="h-11 rounded-xl border border-gray-300 bg-white px-4 text-gray-700 outline-none"
+          >
+            <option value="all">Todas as categorias</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
         </div>
+      </div>
 
         {error && (
           <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
@@ -198,6 +202,7 @@ export function Materials() {
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b border-slate-200">
+                  <th className="text-left py-5 px-6 text-sm font-semibold text-slate-800">ID</th>
                   <th className="text-left py-5 px-6 text-sm font-semibold text-slate-800">Código</th>
                   <th className="text-left py-5 px-6 text-sm font-semibold text-slate-800">Nome</th>
                   <th className="text-left py-5 px-6 text-sm font-semibold text-slate-800">Categoria</th>
@@ -221,6 +226,9 @@ export function Materials() {
                       key={material.id}
                       className="border-b border-slate-200 hover:bg-slate-50"
                     >
+                      <td className="py-5 px-6 text-sm text-slate-500 font-mono">
+                        {material.id}
+                      </td>
                       <td className="py-5 px-6 text-sm text-slate-500 font-mono">
                         {material.code}
                       </td>

@@ -1,165 +1,91 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import { Layout } from '../components/sana/Layout';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Textarea } from '../components/ui/textarea';
-import { Card } from '../components/ui/card';
-import { ArrowLeft, Save, TrendingUp } from 'lucide-react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../components/ui/select';
+// =========================================================
+// Este arquivo contém o componente de Nova Entrada.
+// 
+// Funções principais:
+// - Exibir formulário para registrar entrada de material
+// - Enviar requisição autenticada para /movimentacoes/
+// - Usar token JWT salvo no localStorage
+// - Exibir mensagens de sucesso ou erro
+// =========================================================
 
-const materials = [
-  { id: 1, name: 'Parafusos M6', current: 15, unit: 'un' },
-  { id: 2, name: 'Cabos 2.5mm', current: 850, unit: 'un' },
-  { id: 3, name: 'Luvas PVC', current: 120, unit: 'un' },
-  { id: 4, name: 'Fita Isolante Preta', current: 25, unit: 'un' },
-  { id: 5, name: 'Abraçadeiras 1/2"', current: 8, unit: 'un' },
-];
+import { useState } from "react";
+import { Layout } from "../components/sana/Layout";
+import { Card } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
+
+const API_URL = "http://127.0.0.1:8000";
 
 export function NewEntry() {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    material: '',
-    quantity: '',
-    observation: ''
-  });
+  // -----------------------------------------------------
+  // Estados locais para material, quantidade e mensagens
+  // -----------------------------------------------------
+  const [materialId, setMaterialId] = useState("");
+  const [quantidade, setQuantidade] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const selectedMaterial = materials.find(m => m.id.toString() === formData.material);
-  const newStock = selectedMaterial 
-    ? selectedMaterial.current + (parseInt(formData.quantity) || 0)
-    : 0;
-
-  const handleSubmit = (e: React.FormEvent) => {
+  // -----------------------------------------------------
+  // Função de envio: chama /movimentacoes/ com token JWT
+  // -----------------------------------------------------
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Simulate save
-    navigate('/movements');
-  };
+    try {
+      setError("");
+      setSuccess("");
 
+      // Recupera token salvo no login
+      const token = localStorage.getItem("sana_token");
+
+      const response = await fetch(`${API_URL}/movimentacoes/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({
+          material_id: Number(materialId),
+          tipo: "entrada",
+          quantidade: Number(quantidade),
+          area: "Estoque Central"
+          // usuario_id e responsavel são preenchidos pelo backend via JWT
+        }),
+      });
+
+      if (!response.ok) throw new Error("Erro ao registrar entrada");
+      setSuccess("Entrada registrada com sucesso!");
+    } catch (err) {
+      console.error(err);
+      setError("Não foi possível registrar a entrada.");
+    }
+  }
+
+  // -----------------------------------------------------
+  // Renderização do formulário de nova entrada
+  // -----------------------------------------------------
   return (
     <Layout>
-      <div className="space-y-6 max-w-2xl">
-        <div className="flex items-center gap-4">
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => navigate('/movements')}
-          >
-            <ArrowLeft className="h-5 w-5" />
+      <Card>
+        <h2 className="text-xl font-semibold mb-4">Nova Entrada</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            placeholder="ID do material"
+            value={materialId}
+            onChange={(e) => setMaterialId(e.target.value)}
+          />
+          <Input
+            type="number"
+            placeholder="Quantidade"
+            value={quantidade}
+            onChange={(e) => setQuantidade(e.target.value)}
+          />
+          <Button type="submit" variant="success">
+            Registrar Entrada
           </Button>
-          <div>
-            <h2 className="text-2xl font-semibold text-[#0F172A] mb-1">Nova Entrada</h2>
-            <p className="text-sm text-[#64748B]">Registre a entrada de materiais no estoque</p>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          <Card className="p-6 space-y-6">
-            <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
-              <div className="bg-green-100 p-2 rounded-lg">
-                <TrendingUp className="h-5 w-5 text-green-600" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-green-900">Entrada de Material</p>
-                <p className="text-xs text-green-700">Adiciona unidades ao estoque existente</p>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="material">
-                Material <span className="text-red-500">*</span>
-              </Label>
-              <Select 
-                value={formData.material} 
-                onValueChange={(value) => setFormData({ ...formData, material: value })}
-                required
-              >
-                <SelectTrigger id="material">
-                  <SelectValue placeholder="Selecione um material" />
-                </SelectTrigger>
-                <SelectContent>
-                  {materials.map((material) => (
-                    <SelectItem key={material.id} value={material.id.toString()}>
-                      {material.name} (Estoque atual: {material.current} {material.unit})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="quantity">
-                Quantidade <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="quantity"
-                type="number"
-                placeholder="Ex: 100"
-                value={formData.quantity}
-                onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                required
-                min="1"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="observation">Observação</Label>
-              <Textarea
-                id="observation"
-                placeholder="Ex: NF 12345, Fornecedor XYZ Ltda"
-                value={formData.observation}
-                onChange={(e) => setFormData({ ...formData, observation: e.target.value })}
-                rows={3}
-              />
-              <p className="text-xs text-[#64748B]">
-                Informações adicionais como nota fiscal, fornecedor, lote, etc.
-              </p>
-            </div>
-
-            {selectedMaterial && formData.quantity && (
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-sm font-medium text-[#0F172A] mb-2">
-                  Preview da Movimentação
-                </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="text-[#64748B]">Estoque atual:</span>
-                  <span className="font-medium text-[#0F172A]">
-                    {selectedMaterial.current} {selectedMaterial.unit}
-                  </span>
-                  <span className="text-[#64748B]">→</span>
-                  <span className="text-[#64748B]">Novo estoque:</span>
-                  <span className="font-semibold text-green-600">
-                    {newStock} {selectedMaterial.unit}
-                  </span>
-                </div>
-              </div>
-            )}
-
-            <div className="flex items-center justify-end gap-4 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => navigate('/movements')}
-              >
-                Cancelar
-              </Button>
-              <Button 
-                type="submit"
-                className="bg-[#10B981] hover:bg-[#059669]"
-              >
-                <Save className="h-4 w-4 mr-2" />
-                Confirmar Entrada
-              </Button>
-            </div>
-          </Card>
         </form>
-      </div>
+        {error && <p className="text-red-600 mt-2">{error}</p>}
+        {success && <p className="text-green-600 mt-2">{success}</p>}
+      </Card>
     </Layout>
   );
 }

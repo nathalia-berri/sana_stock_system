@@ -1,3 +1,13 @@
+// =========================================================
+// Este arquivo contém o componente de Login.
+// 
+// Funções principais:
+// - Exibir formulário de login
+// - Autenticar usuário via /token
+// - Salvar token JWT no localStorage
+// - Redirecionar para a página principal após login
+// =========================================================
+
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Logo } from '../components/sana/Logo'
@@ -7,6 +17,9 @@ export function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  // -----------------------------------------------------
+  // Função de login: chama /token e salva JWT
+  // -----------------------------------------------------
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -25,31 +38,38 @@ export function Login() {
       })
 
       if (!response.ok) {
-        alert('Senha incorreta! Use: admin / 123456')
+        alert('Senha incorreta ou usuário não encontrado')
         return
       }
 
       const data = await response.json()
+
+      // Salva token JWT no localStorage
       localStorage.setItem('sana_token', data.access_token)
+
+      // Redireciona para a página principal
       navigate('/materials')
     } catch (err) {
       console.error(err)
-      alert('Erro no servidor. Backend rodando?')
+      alert('Erro no servidor. Tente novamente mais tarde.')
     }
   }
 
+  // -----------------------------------------------------
+  // Renderização da tela de login
+  // -----------------------------------------------------
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-blue-600 to-blue-800 p-4">
       <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/10 backdrop-blur-md shadow-2xl p-8 text-white">
         <div className="flex items-center justify-center mb-8">
           <div className="flex items-center gap-4">
             <Logo size="lg" />
-            <span className="text-5xl font-medium">SANA</span>
+            {/* <span className="text-5xl font-medium">Stock System</span> */}
           </div>
         </div>
 
         <div className="text-center mb-10">
-          <h1 className="text-2xl font-semibold mb-2">Bem-vindo ao SANA</h1>
+          <h1 className="text-2xl font-semibold mb-2">Bem-vindo ao SANA Stock System</h1>
           <p className="text-sm text-blue-100">
             Sistema de Gestão de Almoxarifado
           </p>
@@ -99,13 +119,13 @@ export function Login() {
             href="#"
             className="text-sm text-blue-100 hover:text-white transition"
           >
-            Novo usuário? Entre em contato com o administrador
+            Novo usuário? Entre em contato com o administrador.
           </a>
         </div>
 
         <div className="mt-10 pt-6 border-t border-white/20 text-center">
           <p className="text-xs text-blue-100">
-            © 2026 SANA Stock System. Todos os direitos reservados.
+            © 2026 SANA Stock System
           </p>
         </div>
       </div>

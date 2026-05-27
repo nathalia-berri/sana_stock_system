@@ -1,6 +1,5 @@
 import { createBrowserRouter } from 'react-router';
 import { Login } from './pages/Login';
-import { Dashboard } from './pages/Dashboard';
 import { Materials } from './pages/Materials';
 import { NewMaterial } from './pages/NewMaterial';
 import { Movements } from './pages/Movements';
@@ -12,10 +11,6 @@ export const router = createBrowserRouter([
   {
     path: '/',
     Component: Login,
-  },
-  {
-    path: '/dashboard',
-    Component: Dashboard,
   },
   {
     path: '/materials',
