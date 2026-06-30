@@ -10,7 +10,8 @@ import { Search, TrendingUp, TrendingDown } from "lucide-react";
 
 type ApiMovement = {
   id: number;
-  material_id: number;
+  // material_id: number;
+  material_nome: string;
   tipo: "entrada" | "saida";
   quantidade: number;
   usuario_id: number;
@@ -51,7 +52,7 @@ export function Movements() {
       const mapped: Movement[] = data.map((mov) => ({
         id: mov.id,
         date: new Date(mov.data).toLocaleString("pt-BR"),
-        material: `ID ${mov.material_id}`,
+        material: `${mov.material_nome}`,
         type: mov.tipo.toLowerCase() === "entrada" ? "Entrada" : "Saída",
         quantity: Number(mov.quantidade),
         user: `Usuário ${mov.usuario_id}`,
