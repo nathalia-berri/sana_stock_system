@@ -5,6 +5,7 @@ import { Movements } from './pages/Movements'
 import { NewEntry } from './pages/NewEntry'
 import { NewExit } from './pages/NewExit'
 import { NewMaterial } from './pages/NewMaterial'
+import { EditMaterial } from "./pages/EditMaterial";
 import { Reports } from './pages/Reports'
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/movements" element={<Movements />} />
         <Route path="/movements/new-entry" element={<NewEntry />} />
         <Route path="/movements/new-exit" element={<NewExit />} />
+        <Route path="/materials/edit/:id" element={<EditMaterial />} />
         <Route path="/reports" element={<Reports />} />
       </Routes>
     </BrowserRouter>

@@ -17,13 +17,45 @@ import { Button } from "../components/ui/button";
 const API_URL = "http://127.0.0.1:8000";
 
 export function NewEntry() {
+
+  // -----------------------------------------------------
+  // Tipo para representar um material vindo da API
+  // -----------------------------------------------------
+  type Material = {
+    id: number;
+    codigo: string;
+    nome: string;
+  };
+
   // -----------------------------------------------------
   // Estados locais para material, quantidade e mensagens
   // -----------------------------------------------------
   const [materialId, setMaterialId] = useState("");
+  const [query, setQuery] = useState("");
+  const [suggestions, setSuggestions] = useState<Material[]>([]);
   const [quantidade, setQuantidade] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  // -----------------------------------------------------
+  // Função para buscar materiais conforme digita
+  // -----------------------------------------------------
+  async function handleSearch(text: string) {
+    setQuery(text);
+    if (text.length > 1) {
+      try {
+        const res = await fetch(`${API_URL}/materiais/search?q=${text}`);
+        if (res.ok) {
+          const data = await res.json();
+          setSuggestions(data);
+        }
+      } catch {
+        setError("Erro ao buscar materiais.");
+      }
+    } else {
+      setSuggestions([]);
+    }
+  }
 
   // -----------------------------------------------------
   // Função de envio: chama /movimentacoes/ com token JWT
@@ -68,17 +100,43 @@ export function NewEntry() {
       <Card>
         <h2 className="text-xl font-semibold mb-4">Nova Entrada</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            placeholder="ID do material"
-            value={materialId}
-            onChange={(e) => setMaterialId(e.target.value)}
-          />
+          
+          {/* campo de autocomplete para material */}
+          <div className="relative">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => handleSearch(e.target.value)}
+              placeholder="Digite o material..."
+              className="border rounded px-3 py-2 w-full"
+            />
+            {suggestions.length > 0 && (
+              <ul className="absolute bg-white border rounded mt-1 w-full max-h-40 overflow-y-auto z-10">
+                {suggestions.map((s) => (
+                  <li
+                    key={s.id}
+                    onClick={() => {
+                      setMaterialId(String(s.id));
+                      setQuery(`${s.codigo} - ${s.nome}`);
+                      setSuggestions([]);
+                    }}
+                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {s.codigo} - {s.nome}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* campo de quantidade */}
           <Input
             type="number"
             placeholder="Quantidade"
             value={quantidade}
             onChange={(e) => setQuantidade(e.target.value)}
           />
+
           <Button type="submit" variant="success">
             Registrar Entrada
           </Button>

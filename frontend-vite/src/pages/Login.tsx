@@ -60,7 +60,7 @@ export function Login() {
   // -----------------------------------------------------
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-blue-600 to-blue-800 p-4">
-      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/10 backdrop-blur-md shadow-2xl p-8 text-white">
+      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white shadow-2xl p-8 text-gray-900">
         <div className="flex items-center justify-center mb-8">
           <div className="flex items-center gap-4">
             <Logo size="lg" />
@@ -69,8 +69,8 @@ export function Login() {
         </div>
 
         <div className="text-center mb-10">
-          <h1 className="text-2xl font-semibold mb-2">Bem-vindo ao SANA Stock System</h1>
-          <p className="text-sm text-blue-100">
+          <h1 className="text-2xl font-semibold mb-2 text-gray-900">Bem-vindo ao SANA Stock System</h1>
+          <p className="text-sm text-gray-600">
             Sistema de Gestão de Almoxarifado
           </p>
         </div>
@@ -87,7 +87,7 @@ export function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full h-12 rounded-lg border border-white/50 bg-transparent px-4 text-white placeholder:text-blue-100 outline-none"
+              className="w-full h-12 rounded-lg border border-gray-300 bg-gray-100 px-4 text-gray-900 placeholder:text-gray-500 outline-none"
             />
           </div>
 
@@ -102,7 +102,7 @@ export function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full h-12 rounded-lg border border-white/50 bg-transparent px-4 text-white placeholder:text-blue-100 outline-none"
+              className="w-full h-12 rounded-lg border border-gray-300 bg-gray-100 px-4 text-gray-900 placeholder:text-gray-500 outline-none"
             />
           </div>
 
@@ -117,7 +117,7 @@ export function Login() {
         <div className="mt-8 text-center">
           <a
             href="#"
-            className="text-sm text-blue-100 hover:text-white transition"
+            className="text-sm text-gray-600 hover:text-gray-900 transition"
           >
             Novo usuário? Entre em contato com o administrador.
           </a>
