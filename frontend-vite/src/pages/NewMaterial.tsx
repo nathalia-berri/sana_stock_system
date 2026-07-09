@@ -44,10 +44,16 @@ export function NewMaterial() {
       setError("");
       setSuccess("");
 
+      // Recupera token salvo no login
+      const token = localStorage.getItem("token");
+
       // envio dos dados para a API
       const response = await fetch(`${API_URL}/materiais/`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           nome,
           categoria,

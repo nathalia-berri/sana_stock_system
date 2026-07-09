@@ -10,7 +10,6 @@ import { Search, TrendingUp, TrendingDown } from "lucide-react";
 
 type ApiMovement = {
   id: number;
-  // material_id: number;
   material_nome: string;
   tipo: "entrada" | "saida";
   quantidade: number;
@@ -31,6 +30,14 @@ type Movement = {
   responsible: string;
 };
 
+type User = {
+  id: number;
+  nome: string;
+  email: string;
+  role: string;
+  ativo: boolean;
+};
+
 const API_URL = "http://127.0.0.1:8000";
 
 export function Movements() {
@@ -40,6 +47,7 @@ export function Movements() {
   const [movements, setMovements] = useState<Movement[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [user, setUser] = useState<User | null>(null);
 
   async function loadMovements() {
     try {
@@ -69,8 +77,25 @@ export function Movements() {
     }
   }
 
+  async function loadUser() {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      const response = await fetch(`${API_URL}/users/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data);
+      }
+    } catch (err) {
+      console.error("Erro ao carregar usuário", err);
+    }
+  }
+
   useEffect(() => {
     loadMovements();
+    loadUser();
   }, []);
 
   const filteredMovements = movements.filter((movement) => {
@@ -98,20 +123,24 @@ export function Movements() {
             </p>
           </div>
           <div className="flex gap-3">
-            <Button
-              variant="success"
-              onClick={() => navigate("/movements/new-entry")}
-            >
-              <TrendingUp className="h-4 w-4 mr-2" />
-              Nova Entrada
-            </Button>
-            <Button
-              variant="danger"
-              onClick={() => navigate("/movements/new-exit")}
-            >
-              <TrendingDown className="h-4 w-4 mr-2" />
-              Nova Saída
-            </Button>
+            {user?.role === "admin" && (
+              <Button
+                variant="success"
+                onClick={() => navigate("/movements/new-entry")}
+              >
+                <TrendingUp className="h-4 w-4 mr-2" />
+                Nova Entrada
+              </Button>
+            )}
+            {user?.role === "admin" && (
+              <Button
+                variant="danger"
+                onClick={() => navigate("/movements/new-exit")}
+              >
+                <TrendingDown className="h-4 w-4 mr-2" />
+                Nova Saída
+              </Button>
+            )}
           </div>
         </div>
 

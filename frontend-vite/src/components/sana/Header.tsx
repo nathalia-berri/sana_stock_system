@@ -1,13 +1,36 @@
 import { Bell, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+const API_URL = "http://127.0.0.1:8000";
 
 export function Header() {
   const navigate = useNavigate();
+  const [user, setUser] = useState<{ nome?: string; email: string; role: string } | null>(null);
 
   const handleLogout = () => {
-    localStorage.removeItem('sana_token');
+    localStorage.removeItem('token'); // usa a mesma chave do login
     navigate('/');
   };
+
+  useEffect(() => {
+    async function fetchUser() {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      try {
+        const res = await fetch(`${API_URL}/users/me`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data);
+        }
+      } catch {
+        // se der erro, não mostra nada
+      }
+    }
+    fetchUser();
+  }, []);
 
   return (
     <header className="bg-white border-b border-[#E2E8F0] px-6 py-4 ml-0 lg:ml-64">
@@ -34,8 +57,8 @@ export function Header() {
             </div>
 
             <div className="text-left hidden md:block">
-              <p className="text-sm font-medium text-[#0F172A]">Admin SANA</p>
-              <p className="text-xs text-[#64748B]">admin@sana.com</p>
+              <p className="text-sm font-medium text-[#0F172A]">{user?.nome || "Usuário"}</p>
+              <p className="text-xs text-[#64748B]">{user?.email || ""}</p>
             </div>
 
             <button

@@ -45,7 +45,7 @@ export function Login() {
       const data = await response.json()
 
       // Salva token JWT no localStorage
-      localStorage.setItem('sana_token', data.access_token)
+      localStorage.setItem("token", data.access_token);
 
       // Redireciona para a página principal
       navigate('/materials')

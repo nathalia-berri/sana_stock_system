@@ -29,6 +29,14 @@ type Material = {
   status: 'critical' | 'warning' | 'ok';
 };
 
+type User = {
+  id: number;
+  nome: string;
+  email: string;
+  role: string;
+  ativo: boolean;
+};
+
 const API_URL = 'http://127.0.0.1:8000';
 
 export function Materials() {
@@ -40,6 +48,7 @@ export function Materials() {
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [error, setError] = useState('');
+  const [user, setUser] = useState<User | null>(null);
 
   function mapStatus(status: string): 'critical' | 'warning' | 'ok' {
     const normalized = status.toLowerCase();
@@ -114,8 +123,26 @@ export function Materials() {
     }
   }
 
+
+  async function loadUser() {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    const response = await fetch(`${API_URL}/users/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setUser(data);
+    }
+  } catch (err) {
+    console.error("Erro ao carregar usuário", err);
+  }
+}
+
   useEffect(() => {
     loadMaterials();
+    loadUser();
   }, []);
 
   const categories = useMemo(() => {
@@ -151,13 +178,15 @@ export function Materials() {
             <p className="text-slate-500 mt-1">Gerencie o cadastro de materiais</p>
           </div>
 
-          <button
-            onClick={() => navigate('/materials/new')}
-            className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-3 border-none font-medium cursor-pointer"
-          >
-            <Plus className="h-4 w-4" />
-            Novo Material
-          </button>
+          {user?.role === "admin" && (
+            <button
+              onClick={() => navigate('/materials/new')}
+              className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-3 border-none font-medium cursor-pointer"
+            >
+              <Plus className="h-4 w-4" />
+              Novo Material
+            </button>
+          )}
         </div>
 
       <div className="rounded-2xl bg-white p-5">

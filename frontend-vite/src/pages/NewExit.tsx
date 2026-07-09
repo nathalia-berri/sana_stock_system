@@ -66,7 +66,7 @@ export function NewExit() {
       setSuccess("");
 
       // Recupera token salvo no login
-      const token = localStorage.getItem("sana_token");
+      const token = localStorage.getItem("token");
 
       const response = await fetch(`${API_URL}/movimentacoes/`, {
         method: "POST",
